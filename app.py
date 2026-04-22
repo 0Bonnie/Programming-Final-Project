@@ -7,16 +7,16 @@ app = Flask(__name__)
 def home():
     return render_template("index.html")
 
-# @app.route("/html_tags")
-# def html_tags():
-#     return render_template("html_tags.html")
+@app.route("/html_tags")
+def html_tags():
+    return render_template("html_tags.html")
 
-# @app.route("/api/hello")
-# def hello_api():
-#     return jsonify({
-#         "message": "Hello from Flask MVP!",
-#         "status": "success"
-#     })
+@app.route("/api/hello")
+def hello_api():
+    return jsonify({
+        "message": "Hello from Flask MVP!",
+        "status": "success"
+    })
 
 if __name__ == "__main__":
     app.run(
