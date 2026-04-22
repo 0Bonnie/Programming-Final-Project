@@ -1,10 +1,26 @@
-from flask import Flask
+from flask import Flask, render_template, jsonify
+import os
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return "Hello, Docker Flask!"
+    return render_template("index.html")
+
+# @app.route("/html_tags")
+# def html_tags():
+#     return render_template("html_tags.html")
+
+# @app.route("/api/hello")
+# def hello_api():
+#     return jsonify({
+#         "message": "Hello from Flask MVP!",
+#         "status": "success"
+#     })
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(
+        host="0.0.0.0",
+        port=int(os.environ.get("PORT", 5000)),
+        debug=True
+    )
