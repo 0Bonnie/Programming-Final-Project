@@ -3,13 +3,16 @@ from flask_sqlalchemy import SQLAlchemy
 from dotenv import load_dotenv
 import os
 
+import requests
+
+from bs4 import BeautifulSoup
+
 load_dotenv()
 
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = os.getenv("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
@@ -31,8 +34,8 @@ def home():
 def html_tags():
     return render_template("html_tags.html")
 
-@app.route("/todo")
-def todo():
+@app.route("/songs")
+def songs():
 
     todos = Todo.query.all()
 
@@ -71,6 +74,35 @@ def update_todo(id):
             db.session.commit()
 
     return redirect("/todo")
+@app.route("/news")
+def news():
+
+    url = "https://news.ycombinator.com/"
+
+    response = requests.get(url)
+    
+    soup = BeautifulSoup(
+        response.text,
+        "html.parser"
+    )
+
+    titles = soup.select(".titleline a")
+
+    result = ""
+
+    news_list = []
+
+    for title in titles:
+
+        news_list.append({
+            "title": title.text,
+            "url": title["href"]
+        })
+
+    return render_template(
+        "news.html",
+        news_list=news_list
+    )
 
 if __name__ == "__main__":
     app.run(
